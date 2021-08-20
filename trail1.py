@@ -4,7 +4,7 @@ from typing import Optional
 from pydantic import BaseModel
 from google.cloud import pubsub
 
-#os.environ["GOOGLE_APPLICATION_CREDENTIALS"]= "/home/abhisheksharma/Downloads/voval_key.json"
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"]= "<path>/<key-name>.json"
 
 app = FastAPI()
 
@@ -88,9 +88,8 @@ def publish_msg(sensor_id: int, sensor: Sensor):
         return{"Error": "Already Present in the Database"}
 
     sensors[sensor_id] = sensor
-    # TODO(developer)
-    project_id = "searce-playground"
-    topic_id = "trail_pubsubtopic"
+    project_id = "<your project id>"
+    topic_id = "<pub/sub topic name>"
 
     publisher = pubsub_v1.PublisherClient()
     topic_path = publisher.topic_path(project_id, topic_id)
@@ -99,12 +98,4 @@ def publish_msg(sensor_id: int, sensor: Sensor):
     future = publisher.publish(
             topic_path, data, origin="test trail", username="Abhishek-local"
         )
-    '''for n in range(1, 10):
-        data = f"Message number {n}"
-        # Data must be a bytestring
-        data = data.encode("utf-8")
-        # Add two attributes, origin and username, to the message
-        future = publisher.publish(
-            topic_path, data, origin="test trail", username="Abhishek-local"
-        )'''
     return {"Output": future.result()}
